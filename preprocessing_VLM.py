@@ -33,6 +33,22 @@ def extract_first_page_as_image(pdf_path, output_image_path):
 
 
 
+def donwnload_pdfs(pdf_urls, pdf_dir):
+    for i, url in enumerate(pdf_urls):
+        pdf_path = os.path.join(pdf_dir, f"doc_{i}.pdf")
+        download_pdf(url, pdf_path)
+        print(f'Downloaded pdf {i}')
+        
+        
+def extract_imgs_from_pdfs(pdf_dir, images_dir):
+    for pdf_path in os.listdir(pdf_dir):
+        i = int(pdf_path.split('.')[-1])
+        print(f'Extracting image for {pdf_path}')
+        image_path = os.path.join(images_dir, f"{i}.png")
+        extract_first_page_as_image(pdf_path, image_path)
+        
+
+
 if __name__=='__main__':
     # Directories for storage
     pdf_dir = "pdf_documents"
@@ -41,13 +57,13 @@ if __name__=='__main__':
     os.makedirs(images_dir, exist_ok=True)
     
     dataset = load_dataset("maribr/publication_dates_fr")
-    dataset = dataset['train'].to_pandas()
+    df_golds = dataset['train'].to_pandas()
     # pdf_urls = dataset['train']['url']
-    print(dataset)
+    print(df_golds)
     
     df_cache_urls = pd.read_csv("NLP_in_industry-original_data.csv")[['url','cache']]
     
-    pdf_urls = dataset.merge(df_cache_urls)['cache'].to_list()
+    pdf_urls = df_golds.merge(df_cache_urls, on = 'url')['cache'].to_list()
     
     image_paths = []
     
@@ -64,7 +80,6 @@ if __name__=='__main__':
         
         """
         TODO
-
             - save a csv file with the columns : url date image_path
             - try to predict things for a couple rows
             - push code
