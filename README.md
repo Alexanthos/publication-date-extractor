@@ -28,6 +28,13 @@ Our corpus consisted of 500 official documents in French, created by cities, mun
 
 ## How to use
 
+First, you need to clone this repository and create an environment using the method of your choice (venv, pipenv, conda)
+
+Then, isntall the necessary libraries:
+~~~
+$ pip install -r requirements.txt
+~~~
+
 In order to use the pipeline with our data, the data has to be in the right format. That can be done by running the following command. Only input and output path are mandatory arguments and possible output types are csv or pickle (pkl) files. <br>   
 ~~~
 $ python preprocessing_finetune.py \
