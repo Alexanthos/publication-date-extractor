@@ -45,4 +45,4 @@ $ python finetuned_llama_inference.py \
   --gold-labels <column_name_of_gold_lables>
 ~~~
 
-The predicted dates will be returned in a new column in the passed dataframe.
+The predicted dates will be returned in a new column in the passed dataframe. If the gold label flag is passed, the script also performs evaluation and returns accuracy for perfect matches, for matches in month and year and for year matches.
