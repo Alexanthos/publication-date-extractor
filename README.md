@@ -28,9 +28,9 @@ Our corpus consisted of 500 official documents in French, created by cities, mun
 
 ## How to use
 
-First, you need to clone this repository and create an environment using the method of your choice (venv, pipenv, conda)
+First, you need to clone this repository and create an environment using the method of your choice (venv, pipenv, conda).
 
-Then, isntall the necessary libraries:
+Then, install the necessary libraries:
 ~~~
 $ pip install -r requirements.txt
 ~~~
