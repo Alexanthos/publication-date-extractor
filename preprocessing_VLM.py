@@ -6,8 +6,6 @@ from datasets import load_dataset
 import pandas as pd
 
 
-
-# Function to download a PDF file
 def download_pdf(url, save_path):
     try:
         response = requests.get(url, stream=True, timeout=10)
@@ -19,7 +17,7 @@ def download_pdf(url, save_path):
     except requests.RequestException as e:
         print(f"Failed to download {url}: {e}")
 
-# Function to extract the first page as an image
+
 def extract_first_page_as_image(pdf_path, output_image_path):
     try:
         pdf_document = fitz.open(pdf_path)
@@ -30,7 +28,6 @@ def extract_first_page_as_image(pdf_path, output_image_path):
         print(f"Extracted image: {output_image_path}")
     except Exception as e:
         print(f"Failed to extract image from {pdf_path}: {e}")
-
 
 
 def donwnload_pdfs(pdf_urls, pdf_dir):
@@ -50,7 +47,6 @@ def extract_imgs_from_pdfs(pdf_dir, images_dir):
 
 
 if __name__=='__main__':
-    # Directories for storage
     pdf_dir = "pdf_documents"
     images_dir = "extracted_images"
     os.makedirs(pdf_dir, exist_ok=True)
@@ -58,7 +54,6 @@ if __name__=='__main__':
     
     dataset = load_dataset("maribr/publication_dates_fr")
     df_golds = dataset['train'].to_pandas()
-    # pdf_urls = dataset['train']['url']
     print(df_golds)
     
     df_cache_urls = pd.read_csv("NLP_in_industry-original_data.csv")[['url','cache']]
@@ -67,15 +62,14 @@ if __name__=='__main__':
     
     image_paths = []
     
-    # Process PDFs
     for i, url in enumerate(pdf_urls):
         pdf_path = os.path.join(pdf_dir, f"doc_{i}.pdf")
         image_path = os.path.join(images_dir, f"{i}.png")
 
-        # Download PDF
+        # download PDF
         download_pdf(url, pdf_path)
 
-        # Extract first page as image
+        # extract first page as image
         extract_first_page_as_image(pdf_path, image_path)
         
         """
