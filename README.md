@@ -8,7 +8,7 @@ The aim of this project is to propose a pipline that determines the publication 
 We use a Llama 3.2-Instruct 8B Model in 4bit quantization that was fine-tuned on the date extraction task to determine the publication date. The model output has consistently the following format: {"publication date": "DD/MM/YYYY"}. For our test data set we computed the accuracy for perfect matches, mont and year matches and only year matches: 
 
 |Match              |Accuracy|
-|-------------------|-------:|
+|:------------------|-------:|
 |Day, Month and year|71%     |
 | Month and Year    |  82%   |
 | Year              | 93%    |
