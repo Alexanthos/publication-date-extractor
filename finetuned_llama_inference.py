@@ -1,5 +1,7 @@
 from unsloth import FastLanguageModel, get_chat_template
 import ast
+import argparse
+import pandas as pd
 
 def format_question(context:str,
                     prompt:str = 'What is the publication date of the document? Output as a structured JSON object with a format DD/MM/YYYY.'):
@@ -74,3 +76,56 @@ def label_dataframe(df, model_checkpoint, return_formatted_date = True):
         df['predicted_date'] = df['predicted_date'].apply(format_predicted_date)
 
     return df
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Predict dates for a dataset")
+
+    parser.add_argument("--input-path", type=str, help="Path to file that you want to label. Can be .csv or .pkl")
+    parser.add_argument("--output-path", type=str, help="Output path and filename. Can be .csv or .pkl")
+    parser.add_argument("--model-checkpoint", type=str, default='zmilczarek/llama3_8b-finetuned-nlp_industry-adapters', help="Checkpoint of the model you will use")
+    parser.add_argument("--gold-labels", type=str, default='none', help="The name of the column with gold labels. If passed, accuracy score will be computed")
+
+
+    args = parser.parse_args()
+
+
+    print(f'Input path: {args.input_path}')
+    print(f'Output path: {args.output_path}')
+    print(f"Checkpoint : {args.model_checkpoint}")
+
+    in_file_type = args.input_path.split('.')[-1]
+    assert in_file_type in ('csv', 'pkl'), 'Incorrect filetype passed into --input-path. Has to be either a .csv or .pkl.'
+
+    out_file_type = args.output_path.split('.')[-1]
+    assert out_file_type in ('csv', 'pkl'), 'Incorrect filetype passed into --output-path. Has to be either a .csv or .pkl.'
+
+    if in_file_type == 'csv':
+        df = pd.read_csv(args.input_path)
+    elif in_file_type=='pkl':
+        df = pd.read_pickle(args.input_path)
+
+    print('Loaded the dataframe\n\n')
+
+    df = label_dataframe(df, args.model_checkpoint)
+    print('\n\nGenerated labels')
+
+    if out_file_type == 'csv':
+        df.to_csv(args.output_path, index=False)
+    elif out_file_type=='pkl':
+        df.to_pickle(args.output_path)
+
+    if args.gold_labels !='':
+        assert args.gold_labels in df.columns, "The gold labels column that you passed is not in the dataframe"
+        acc_strict = (df['predicted_date'] == df[args.gold_labels ]).mean()
+        acc_year_month = (df['predicted_date'].str[-7:] == df[args.gold_labels ].str[-7:]).mean()
+        acc_year = (df['predicted_date'].str[-4:] == df[args.gold_labels ].str[-4:]).mean()
+        print(f"\nAccuracy on exact date matches : {acc_strict*100:.2f}")
+        print(f"Accuracy on month and year matches : {acc_year_month*100:.2f}")
+        print(f"Accuracy on year matches : {acc_year*100:.2f}")
+
+
+
+if __name__=='__main__':
+    main()
