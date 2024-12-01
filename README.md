@@ -4,6 +4,8 @@ University project by Hanna Brinkmann, Zofia Milczarek, Alexandre Nechab, Joanna
 
 The aim of this project is to propose a pipeline that determines the publication date of a given document. 
 
+A full description of the project is available in the extract_publication_date_documentation.pdf file.
+
 ## Approach
 We use a Llama 3.2-Instruct 8B Model in 4bit quantization that was fine-tuned on the date extraction task to determine the publication date. The model output has consistently the following format:
 ~~~
