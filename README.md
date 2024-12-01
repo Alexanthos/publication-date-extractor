@@ -26,7 +26,7 @@ Our corpus consisted of 500 official documents created by cities, municipalities
 
 ## How to use
 
-In order to use the pipeleine with our data, the data have to be in the right format. That can be done by running the following command where only input and output path are mandatory arguments: <br>   
+In order to use the pipeleine with our data, the data have to be in the right format. That can be done by running the following command. Only input and output path are mandatory arguments and possible output tpyes are csv or pickle (pkl) files. <br>   
 ~~~
 $ python preprocessing_finetune.py \
 --input-path <original_dataset_path>
